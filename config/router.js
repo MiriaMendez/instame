@@ -14,7 +14,7 @@ router.patch('/users/:id/edit', usersController.edit)
 router.post('/post/create', postController.create)
 router.get('/post/:id', postController.show)
 router.post('/post/:id/comments/create', commentController.create)
-//router.post('/likes/create', commentController.likesCreate)
+router.post('/post/:id/like', postController.like)
 
 router.post('/login', authMiddleware.isNotAuthenticated, usersController.doLogin);
 router.post('/logout', authMiddleware.isAuthenticated, usersController.logout);

@@ -53,7 +53,7 @@ app.use(function (error, req, res, next) {
     res.json(data);
 });
 
-const port = normalizePort(process.env.PORT || '5000');
+const port = normalizePort(process.env.PORT || '4000');
   app.listen(port, () => {
     console.log(`Listening on port ${port}`);
 });

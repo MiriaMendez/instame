@@ -2,6 +2,7 @@ const createError = require('http-errors');
 const Post = require ('../models/post.model');
 const Comment = require ('../models/comment.model');
 const User = require('../models/user.model');
+const Like = require('../models/like.model')
 
 
 module.exports.create = (req, res, next) => {
@@ -11,7 +12,8 @@ module.exports.create = (req, res, next) => {
         post: req.body.post
     })
 
-    comment.save()
+    Comment.save()
     .then(comment => res.status(201).json(comment))
     .catch(next)
 }
+
