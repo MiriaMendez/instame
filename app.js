@@ -47,13 +47,16 @@ app.use(function (error, req, res, next) {
       data.errors = error.errors
     } else if (error instanceof mongoose.Error.CastError) {
       error = createError(404, 'Resource not found')
+    } else if (error.code === 11000) {
+      res.status(400)
+      data.errors = { email: 'already exist' }
     }
   
     data.message = error.message;
     res.json(data);
 });
 
-const port = normalizePort(process.env.PORT || '4000');
+const port = normalizePort(process.env.PORT || '5000');
   app.listen(port, () => {
     console.log(`Listening on port ${port}`);
 });

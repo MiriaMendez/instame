@@ -4,6 +4,25 @@ const Comment = require('../models/comment.model');
 const Like = require('../models/like.model');
 const createError = require('http-errors');
 
+module.exports.all = (req, res, next) => {
+    Post.find()
+        .populate('likes')
+        .populate('user')
+        .then(posts => {
+            res.json(posts)
+        })
+        .catch(next)
+}
+
+module.exports.list = (req, res, next) => {
+    Post.find({ user: req.params.id })
+        .populate('comments')
+        .then(posts => {
+            res.json(posts)
+        })
+        .catch(next)
+}
+
 module.exports.create = (req, res, next) => {
     const post = new Post ({
         user: req.currentUser.id,
@@ -20,6 +39,7 @@ module.exports.create = (req, res, next) => {
 module.exports.show = (req, res, next) => {
     Post.findOne({_id: req.params.id})
     .populate('comments')
+    .populate('user')
     .then(post => {
         if (post) {
             res.json(post)

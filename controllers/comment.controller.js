@@ -9,11 +9,11 @@ module.exports.create = (req, res, next) => {
     const comment = new Comment ({
         text: req.body.text,
         user: req.currentUser.id,
-        post: req.body.post
+        post: req.params.id
     })
 
-    Comment.save()
-    .then(comment => res.status(201).json(comment))
-    .catch(next)
+    comment.save()
+        .then(comment => res.status(201).json(comment))
+        .catch(next)
 }
 

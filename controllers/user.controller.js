@@ -28,6 +28,7 @@ module.exports.doLogin = (req, res, next) => {
     } 
 
     User.findOne({ email: email })
+    .populate('post')
     .then( user => {
         if (!user) {
             throw createError(404, 'User not found')
@@ -51,20 +52,30 @@ module.exports.profile = (req, res, next) => {
     const id = req.params.id || req.currentUser.id
 
     User.findById(id)
-        .then(user =>  res.json(user))
+        .then(user =>  {
+            if (user) {
+                res.json(user)
+            } else {
+                throw createError(404, "User not found")
+            }
+        })
         .catch(next)
 }
 
 module.exports.edit = (req, res, next) => {
-   User.findByIdAndUpdate(req.params.id, req.body , {new:true})
-   .then(user => {
-       if(!user) {
-           throw createError(404, 'User not found')
-       } else {
-           res.json(user)
-       }
-   })
-   .catch(next)
+    if (req.params.id !== req.currentUser.id) {
+        throw createError(403, "Can't update other user")
+    }
+
+   User.findByIdAndUpdate(req.params.id, req.body, { new:true })
+    .then(user => {
+        if(!user) {
+            throw createError(404, 'User not found')
+        } else {
+            res.json(user)
+        }
+    })
+    .catch(next)
 }
 
 module.exports.logout = (req, res, next) => {
