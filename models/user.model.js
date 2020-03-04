@@ -30,7 +30,8 @@ const userSchema = new mongoose.Schema({
         type: String
     },
     img: {
-        type: String
+        type: String,
+        default: 'https://i.pinimg.com/originals/5b/b4/8b/5bb48b07fa6e3840bb3afa2bc821b882.jpg'
     },
     validated: {
         type: Boolean
@@ -78,12 +79,12 @@ userSchema.methods.checkPassword = function (password) {
     return bcrypt.compare(password, this.password);
 }
 
-// userSchema.virtual('posts', {
-//     ref: 'Post',
-//     localField: '_id',
-//     foreignField: 'user',
-//     justOne: false,
-// });
+userSchema.virtual('posts', {
+    ref: 'Post',
+    localField: '_id',
+    foreignField: 'user',
+    justOne: false,
+});
 
 const User = mongoose.model('User', userSchema);
 

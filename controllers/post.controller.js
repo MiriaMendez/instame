@@ -24,11 +24,14 @@ module.exports.list = (req, res, next) => {
 }
 
 module.exports.create = (req, res, next) => {
+    if (!req.file.url) {
+        res.status(400).json({})
+        return;
+    }
     const post = new Post ({
         user: req.currentUser.id,
         body: req.body.body,
-        img: req.body.img
-
+        img: req.file.url
     })
 
     post.save()
@@ -38,7 +41,11 @@ module.exports.create = (req, res, next) => {
 
 module.exports.show = (req, res, next) => {
     Post.findOne({_id: req.params.id})
-    .populate('comments')
+    .populate({
+        path: 'comments',
+        populate: { path: 'user' }
+      }    
+    )
     .populate('user')
     .then(post => {
         if (post) {

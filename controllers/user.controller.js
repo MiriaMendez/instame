@@ -11,7 +11,7 @@ module.exports.create = (req, res, next) => {
         gender : req.body.gender,
         description : req.body.description,
         password : req.body.password,
-        img : req.body.img, 
+        img : req.file.url, 
         validated : req.body.validated
     })
 
@@ -52,6 +52,7 @@ module.exports.profile = (req, res, next) => {
     const id = req.params.id || req.currentUser.id
 
     User.findById(id)
+        .populate('posts')
         .then(user =>  {
             if (user) {
                 res.json(user)
